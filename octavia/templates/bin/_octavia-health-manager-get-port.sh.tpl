@@ -26,3 +26,11 @@ HM_PORT_MAC=$(openstack port show $PORTNAME -c mac_address -f value)
 
 echo $HM_PORT_ID > /tmp/pod-shared/HM_PORT_ID
 echo $HM_PORT_MAC > /tmp/pod-shared/HM_PORT_MAC
+
+#JD
+HM_PORT_SUBNET=$(openstack port show $PORTNAME -c fixed_ips -f json | jq -r '.fixed_ips.[].subnet_id')
+HM_PORT_CIDR=$(openstack subnet show $HM_PORT_SUBNET -c cidr -f value | cut -d'/' -f2)
+HM_PORT_IP=$(openstack port show $PORTNAME -c fixed_ips -f json | jq -r '.fixed_ips.[].ip_address')/$HM_PORT_CIDR
+ 
+echo $HM_PORT_IP > /tmp/pod-shared/HM_PORT_IP
+#ip addr add $HM_PORT_IP dev o-hm0

@@ -20,12 +20,6 @@ set -ex
 COMMAND="${@:-start}"
 
 function start () {
-  cat > /tmp/dhclient.conf <<EOF
-request subnet-mask,broadcast-address,interface-mtu;
-do-forward-updates false;
-EOF
-
-  dhclient -v o-hm0 -cf /tmp/dhclient.conf
 
   exec octavia-health-manager \
         --config-file /etc/octavia/octavia.conf
